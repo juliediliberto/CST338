@@ -1,0 +1,322 @@
+/** Matthew Binchay, Julia Diliberto, James O'Dea, Vanessa Ulloa
+    CST 338
+   Assignment 2
+   September 13, 2015*/
+
+// For keyboard input
+import java.util.*;
+// For generating random numbers
+import java.lang.Math;
+
+public class Assig2
+{
+   private static Scanner keyboard=new Scanner(System.in);
+   //Simulates a slot machine run
+   public static void main(String[]args)
+   {       
+      int bet=0, winnings=0, pullCount=0;
+      TripleString thePull=new TripleString();     
+
+      bet = getBet();      {
+      while (bet !=0 && pullCount < TripleString.MAX_PULLS)
+      {
+         //Get pull string
+         thePull = pull();
+         pullCount++;
+         //calculate winnings
+         winnings = (getPayMultiplier(thePull) * bet);
+         //add winnings to winnings array
+         thePull.saveWinnings(winnings);
+         //Display the results of the pull
+         display (thePull, winnings);
+         bet = getBet();
+         }
+      thePull.displayWinnings();
+      }
+   }
+   
+   public static int getBet()
+   //Gets bet from user input
+   {
+     int bet = 0;
+      do
+      {
+         System.out.println("Enter your bet (0 - $100)");
+         bet = keyboard.nextInt();         
+      }
+      while(bet < 0 || bet > 100);
+         return bet;
+   }
+
+
+   public static TripleString pull()
+   //Simulates one slot machine pull
+   {
+      TripleString thePull = new TripleString();
+
+      thePull.setString1(slotString());
+      thePull.setString2(slotString());
+      thePull.setString3(slotString());
+
+      return thePull;         
+   }
+
+   private static String slotString()
+   //Randomly returns one "slot" string (BAR, cherries, space or 7)
+   {
+      int randInt=(int)(Math.random() * 100);
+      if (randInt < 51)
+         return "BAR";
+      else if (randInt >=51 && randInt <76)
+         return "cherries";
+      else if (randInt >= 76 && randInt < 87.5)
+         return "space";
+      else 
+         return "7";
+   }
+
+   public static int getPayMultiplier(TripleString thePull)
+   //Determines the appropriate winnings multiplier
+   {
+      int payMultiplier = 0;
+      if (thePull.getString1() == "cherries")
+      {
+         if (thePull.getString2() == "cherries")
+         {
+            if (thePull.getString3() == "cherries")
+               payMultiplier = 30;
+            else
+               payMultiplier = 15;
+         }
+         else
+            payMultiplier = 5;
+      }
+      else if (thePull.getString1() == "BAR" && thePull.getString2() == "BAR" 
+            && thePull.getString3() == "BAR")
+         payMultiplier = 50;
+      else if (thePull.getString1() == "7" && thePull.getString2() == "7" 
+            && thePull.getString3() == "7")
+         payMultiplier = 100;
+      return payMultiplier;
+   }
+ 
+   public static void display (TripleString thePull, int winnings)
+   //Display the result of one pull
+   {
+      String oneString = toString(thePull);
+
+      System.out.println (oneString);
+      if (winnings == 0)
+         System.out.println ("Sorry, you lose");
+      else 
+         System.out.println ("You win! $" + winnings);
+   }
+
+   public static String toString(TripleString currentPull)
+   //Separates TripleString into separate strings for display
+   {
+      String threeToOne = currentPull.getString1() + " " + 
+            currentPull.getString2() + " " + currentPull.getString3() + "\n";
+      return threeToOne;
+   }
+}
+class TripleString
+//Represents slot machine data
+{
+   public static final int MAX_LEN = 20;  //Maximum length of any string 
+   //component of Triple String
+   public static final int MAX_PULLS = 40;
+   private String string1 = "";
+   private String string2 = "";
+   private String string3 = "";
+   private static int[] pullWinnings = new int[MAX_PULLS];
+   private static int numPulls = 0;
+
+   //Default constructor
+   public TripleString()
+   {
+      string1 = new String("");
+      string2 = new String("");
+      string3 = new String("");
+   }  
+
+
+   //Mutator for String1
+   public boolean setString1(String spin)
+   {
+      if (validString(spin))
+      {
+         this.string1=spin;
+         return true;
+      }
+      else
+         return false;
+   }
+
+   //Mutator for String2
+   public Boolean setString2(String spin)
+   {
+      if (validString(spin))
+      {
+         this.string2=spin;
+         return true;
+      }
+      else
+         return false;
+   }
+
+   //Mutator for String3
+   public Boolean setString3(String spin)
+   {
+      if (validString(spin))
+      {
+         this.string3=spin;
+         return true;
+      }
+      else
+         return false;
+   }
+
+   //Accessor for String1
+   public String getString1()
+   {
+      return this.string1;
+   }
+
+   //Accessor for String2
+   public String getString2()
+   {
+      return this.string2;
+   }
+
+   //Accessor for String3
+   public String getString3()
+   {
+      return this.string3;
+   }
+
+   public void saveWinnings (int winnings)
+   //Stores pull winnings
+   {
+      pullWinnings[numPulls]=winnings;
+      numPulls++;
+   }
+
+   private boolean validString(String str)
+   //Validates slot string
+   {
+      return (!(str.equalsIgnoreCase("")) && str.length() <= MAX_LEN);
+   } 
+
+   public void displayWinnings()
+   //Displays the result of the slot machine run
+   {
+      int totalWinnings=0;
+      for (int i = 0; i < numPulls; i++)
+      {
+         totalWinnings = totalWinnings + 
+               pullWinnings[i];  
+      }
+      System.out.println ("Congratulations!  You've won a total of $"
+            + totalWinnings + ".");
+   } 
+}
+/**********************************Output***********************************
+Enter your bet (0 - $100)
+100
+BAR cherries cherries
+
+Sorry, you lose
+Enter your bet (0 - $100)
+50
+cherries BAR BAR
+
+You win! $250
+Enter your bet (0 - $100)
+160
+Enter your bet (0 - $100)
+50
+cherries BAR cherries
+
+You win! $250
+Enter your bet (0 - $100)
+65
+cherries BAR BAR
+
+You win! $325
+Enter your bet (0 - $100)
+63
+space cherries cherries
+
+Sorry, you lose
+Enter your bet (0 - $100)
+100
+BAR BAR BAR
+
+You win! $5000
+Enter your bet (0 - $100)
+30
+BAR cherries cherries
+
+Sorry, you lose
+Enter your bet (0 - $100)
+300
+Enter your bet (0 - $100)
+60
+BAR cherries BAR
+
+Sorry, you lose
+Enter your bet (0 - $100)
+5
+BAR BAR cherries
+
+Sorry, you lose
+Enter your bet (0 - $100)
+75
+7 BAR BAR
+
+Sorry, you lose
+Enter your bet (0 - $100)
+75
+cherries cherries BAR
+
+You win! $1125
+Enter your bet (0 - $100)
+60
+7 BAR BAR
+
+Sorry, you lose
+Enter your bet (0 - $100)
+200
+Enter your bet (0 - $100)
+200
+Enter your bet (0 - $100)
+300
+Enter your bet (0 - $100)
+100
+BAR BAR cherries
+
+Sorry, you lose
+Enter your bet (0 - $100)
+45
+cherries BAR cherries
+
+You win! $225
+Enter your bet (0 - $100)
+50
+cherries cherries 7
+
+You win! $750
+Enter your bet (0 - $100)
+52
+BAR BAR space
+
+Sorry, you lose
+Enter your bet (0 - $100)
+30
+cherries BAR space
+
+You win! $150
+Enter your bet (0 - $100)
+0
+Congratulations!  You've won a total of $8075.

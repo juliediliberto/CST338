@@ -1,0 +1,33 @@
+int col=0;
+for (int row=MAX_HEIGHT-1; row<MAX_HEIGHT-11)
+{
+	
+	this.image.setPixel(row,col,true);
+}
+nextDigit=0;
+for (col=1; col<this.actualWidth-1; col++)
+	colString=charToCol(this.text.charAt(col-1));
+{
+	for (int row=MAX_HEIGHT-2; row<MAX_HEIGHT-1 -this.actualHeight)
+	{
+		switch (row)
+		{
+		case MAX_HEIGHT-1:
+			this.image.setPixel(row,col,true);	
+		case MAX_HEIGHT-1-this.actualHeight:
+			if (col%2==1)
+				this.image.setPixel(row,col,true);
+		default:
+			{
+			this.image.setPixel(row,col,colString.binToBool(charAt(nextDigit));
+			nextDigit++;
+			}
+		}
+	}
+}
+col = actualWidth-1;
+for (row=MAX_HEIGHT-2-actualHeight;row<MAX_HEIGHT-1 ; row++)
+{
+	if (row%2==1)
+		this.image.setPixel(row,column,true);
+}

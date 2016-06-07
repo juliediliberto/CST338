@@ -1,0 +1,63 @@
+ public Boolean generateImageFromText() 
+   {
+      String binString; //text represented in binary
+      int columns = this.text.length();
+      int completedCols = 0;
+      binString = strToBinStr(this.text);
+      
+      //create left limitation line
+      for (int row=0; row<10; row++)
+      {
+         this.image.setPixel(row, 0, true);
+         completedCols++;
+      }
+      //create cols from binary string starting with * and ending with alternating
+      int next=0;
+      for (int col=1; col<columns; col++){
+         for (int row=9; row>1; row++)
+         {
+            switch (row)
+            {
+            case 9:
+               this.image.setPixel(row,col,true);
+            case 1:
+               if (col%2==1)
+                  this.image.setPixel (row,col,false);
+            default:
+               this.image.setPixel (row,col,binToBool(binString.charAt(next)));
+               next++;
+            }
+         }
+         completedCols++;
+      }
+         
+      //create right open borderline
+      for (int row=0; row < 9; row++)
+      {
+         if ((row+1)%2==1)
+            this.image.setPixel(row,completedCols,true);
+         else 
+            this.image.setPixel(row,completedCols,false);
+      }
+      return true;
+   }
+
+   private static String strToBinStr(String text)
+   {
+       String bString="";
+       String temp="";
+       for(int i=0;i<text.length();i++)
+       {
+           temp=Integer.toBinaryString(text.charAt(i));
+           bString+=temp;
+       }
+       return bString;
+   }
+
+   private Boolean binToBool(char next)
+   {
+      if (next == '1')
+         return true;
+      else
+         return false;
+   }

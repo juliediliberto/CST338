@@ -1,0 +1,129 @@
+/*
+	Matthew Bichay
+	Julia Diliberto
+	Vanessa Ulloa
+	James 0'Dea
+	CST 338 - Module 5
+	Assignment #5
+
+*/
+
+import javax.swing.*;
+import java.awt.*;
+
+/*
+	class Assig5P1
+	Phase 1: Read and Display Card pictures
+	class will create JLabels and display them in a JFrame
+*/
+public class Assign5P1
+{
+	/*
+		VARIABLES
+		NUM_CARD_IMAGES is the 52 cards plus 4 jokers and an image for the back of the card
+		icon array is an array of objects to hold and display the cards
+	*/
+	static final int NUM_CARD_IMAGES = 57;
+	static ImageIcon[] icon = new ImageIcon[NUM_CARD_IMAGES];
+	static final int MAX_WINDOW_WIDTH = 1000;
+	static final int MAX_WINDOW_HEIGHT = 650;
+
+	//	METHODS
+	/*
+		loadCardIcons()
+		void method that creates file names and stores then in the icon array
+		creates file names to be used in main() method
+	*/
+	static void loadCardIcons()
+	{
+		int index = 0; // index in the array
+		String suit, cValue;
+
+		// x loops through suits, y loops through values
+		for(int x = 0 ; x < 4 ; x++)
+		{
+			for(int y = 0 ; y < 13 ; y++)
+			{
+				cValue = intToCardValue(y);
+				suit = intToCardSuit(x);
+				//System.out.println("images/" + cValue + suit + ".gif");
+				icon[index] = new ImageIcon("images/" + cValue + suit + ".gif");
+				index++;
+			}
+		}
+	}
+
+	/*
+		turnIntIntoCardValue(int)
+		String method that turns 0 - 12 into an appropriate card value
+	*/
+	static String intToCardValue(int k)
+	{
+		char[] cardValues = {'2','3','4','5','6','7','8','9','T','J','Q','K','A','X'};
+
+		if(k >= 0 && k <= 13)
+			return Character.toString(cardValues[k]);
+		else
+		{
+			System.out.println("invalid Card value");
+			return Character.toString(cardValues[0]);
+		}
+
+	}
+
+	/*
+		turnIntIntoCardSuit(int)
+		String method that takes 0 - 3 and returns an appropriate suit. 
+	*/
+	static String intToCardSuit(int j)
+	{
+		char[] suitValues = {'C','D','H','S'};
+
+		if( j >= 0 && j <= 3)
+			return Character.toString(suitValues[j]);
+		else
+		{
+			System.out.println("invalid suit value");
+			return Character.toString(suitValues[0]);
+		}
+
+	}
+
+	//	MAIN
+	public static void main(String[] args) 
+	{
+		int k;
+
+		// prepare the image icon array
+		loadCardIcons();
+
+		// create Frame (window) for the program to run and display
+		JFrame frmMyWindow = new JFrame("Card Room");
+		frmMyWindow.setSize(MAX_WINDOW_HEIGHT,MAX_WINDOW_WIDTH);
+		frmMyWindow.setLocationRelativeTo(null);
+		frmMyWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		// FlowLayout object created to place the buttons and elements in the frame
+		FlowLayout layout = new FlowLayout(FlowLayout.CENTER,5,20);
+		frmMyWindow.setLayout(layout);
+
+		// prepare image label array
+		JLabel[] labels = new JLabel[NUM_CARD_IMAGES];
+
+		for(k = 0 ; k < NUM_CARD_IMAGES ; k++)
+		{
+			labels[k] = new JLabel(icon[k]);
+		}
+
+		// place the controls in the frame
+		for(k = 0 ; k < NUM_CARD_IMAGES ; k++)
+		{
+			frmMyWindow.add(labels[k]);
+		}
+
+		// setVisible so the user can see elements
+		frmMyWindow.setVisible(true);
+
+	}
+
+}
